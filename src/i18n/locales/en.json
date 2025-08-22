@@ -29,6 +29,8 @@
   "guide.start": "Guide",
   "action.expand": "Expand",
   "action.collapse": "Collapse",
+  "action.fullscreen": "Fullscreen",
+  "action.exitFullscreen": "Exit Fullscreen",
   "profile.account": "Account",
   "profile.username": "Username",
   "profile.preferences": "Preferences",

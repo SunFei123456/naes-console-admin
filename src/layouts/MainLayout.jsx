@@ -57,6 +57,36 @@ export default function MainLayout() {
     }).start()
   }
 
+  // 全屏切换：状态与监听
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  useEffect(() => {
+    const onFsChange = () => {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement
+      setIsFullscreen(Boolean(fsEl))
+    }
+    document.addEventListener('fullscreenchange', onFsChange)
+    document.addEventListener('webkitfullscreenchange', onFsChange)
+    document.addEventListener('msfullscreenchange', onFsChange)
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange)
+      document.removeEventListener('webkitfullscreenchange', onFsChange)
+      document.removeEventListener('msfullscreenchange', onFsChange)
+    }
+  }, [])
+
+  const enterFullscreen = () => {
+    const el = document.documentElement
+    if (el.requestFullscreen) return el.requestFullscreen()
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen()
+    if (el.msRequestFullscreen) return el.msRequestFullscreen()
+  }
+
+  const exitFullscreen = () => {
+    if (document.exitFullscreen) return document.exitFullscreen()
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen()
+    if (document.msExitFullscreen) return document.msExitFullscreen()
+  }
+
   useEffect(() => {
     // 首次进入触发新手引导
     const key = 'guide_done_v1'
@@ -103,6 +133,16 @@ export default function MainLayout() {
           >
             <Icon name="question" className="w-4 h-4" />
             {t('guide.start')}
+          </button>
+          {/* 全屏切换 */}
+          <button
+            className="px-3 py-1 rounded border dark:border-zinc-700 inline-flex items-center gap-2"
+            onClick={() => (isFullscreen ? exitFullscreen() : enterFullscreen())}
+            title={isFullscreen ? t('action.exitFullscreen') : t('action.fullscreen')}
+            aria-label={isFullscreen ? t('action.exitFullscreen') : t('action.fullscreen')}
+          >
+            <Icon name={isFullscreen ? 'compress' : 'expand'} className="w-4 h-4" />
+            <span className="hidden sm:inline">{isFullscreen ? t('action.exitFullscreen') : t('action.fullscreen')}</span>
           </button>
           {/* 登出 */}
           <button

@@ -29,6 +29,8 @@
   "guide.start": "新手引导",
   "action.expand": "展开",
   "action.collapse": "收起",
+  "action.fullscreen": "全屏",
+  "action.exitFullscreen": "退出全屏",
   "profile.account": "账号信息",
   "profile.username": "用户名",
   "profile.preferences": "偏好设置",
