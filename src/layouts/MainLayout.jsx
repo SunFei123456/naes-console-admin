@@ -7,6 +7,7 @@ import { useAuthStore } from '../stores/auth'
 import introJs from 'intro.js'
 import 'intro.js/minified/introjs.min.css'
 import Icon from '../components/Icon'
+import LangSelect from '../components/LangSelect'
 
 // 简易布局：左侧侧边栏 + 顶部工具条（主题/语言/登出）+ 面包屑 + 主内容
 export default function MainLayout() {
@@ -115,17 +116,8 @@ export default function MainLayout() {
             <Icon name={theme === 'dark' ? 'sun' : 'moon'} className="w-4 h-4" />
             {theme === 'dark' ? t('theme.light') : t('theme.dark')}
           </button>
-          {/* 语言切换 */}
-          <Icon name="globe" className="w-4 h-4 opacity-70" />
-          <select
-            className="px-2 py-1 rounded border dark:border-zinc-700 bg-transparent"
-            value={lang}
-            onChange={e => setLang(e.target.value)}
-            data-guide="lang"
-          >
-            <option value="zh">中文</option>
-            <option value="en">English</option>
-          </select>
+          {/* 语言切换（自定义下拉） */}
+          <LangSelect value={lang} onChange={setLang} />
           {/* 引导按钮 */}
           <button
             className="px-3 py-1 rounded border dark:border-zinc-700 inline-flex items-center gap-2"
