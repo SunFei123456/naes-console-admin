@@ -7,9 +7,14 @@ import UPlotChart from '../components/UPlotChart'
 import NivoBar from '../components/NivoBar'
 import { ALL_MESSAGES } from '../mocks/messages'
 import dayjs from 'dayjs'
+import { useThemeStore } from '../stores/theme'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
   const { t } = useTranslation()
+  const theme = useThemeStore(s => s.theme)
+  const isDark = theme === 'dark'
+  const nav = useNavigate()
   // 源数据
   const list = ALL_MESSAGES || []
 
@@ -92,13 +97,28 @@ export default function Dashboard() {
         {/* 趋势（占两列） */}
         <div className="lg:col-span-2 p-4 rounded border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
           <div className="mb-3 text-sm font-medium">New Messages - Last 30 days</div>
-          <UPlotChart data={uplotData} className="w-full" style={{ height: 240 }} options={{ scales: { x: { time: true } } }} />
+          <UPlotChart
+            data={uplotData}
+            className="w-full"
+            style={{ height: 240 }}
+            options={{ scales: { x: { time: true } } }}
+            isDark={isDark}
+            xTickFormatter={(ts) => dayjs(ts).format('MM-DD')}
+          />
         </div>
 
         {/* Top 公司 */}
         <div className="p-4 rounded border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
           <div className="mb-3 text-sm font-medium">Top Companies</div>
-          <NivoBar data={topBarData} height={240} />
+          <NivoBar
+            data={topBarData}
+            height={240}
+            isDark={isDark}
+            onBarClick={(d) => {
+              const company = d?.data?.company || d?.indexValue || ''
+              if (company) nav(`/message?company=${encodeURIComponent(company)}`)
+            }}
+          />
         </div>
       </div>
 

@@ -9,6 +9,7 @@ import Icon from '../components/Icon';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { fetchMessagePage } from '../services/message';
 import { loadingBegin, loadingEnd, useLoadingStore } from '../stores/loading';
+import { useLocation } from 'react-router-dom';
 
 export default function Message() {
   const { t } = useTranslation()
@@ -28,6 +29,7 @@ export default function Message() {
 
   const [detailOpen, setDetailOpen] = useState(false);
   const [current, setCurrent] = useState(null);
+  const location = useLocation();
 
   const columns = useMemo(() => ([
     { key: 'name', title: t('message.name'), dataIndex: 'name' },
@@ -43,12 +45,12 @@ export default function Message() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns.length])
 
-  const runSearch = async (_page = 1, _pageSize = pageSize, sortField = '', sortOrder = '') => {
+  const runSearch = async (_page = 1, _pageSize = pageSize, sortField = '', sortOrder = '', kwOverride) => {
     loadingBegin('list');
     const { list, total } = await fetchMessagePage({ 
       page: _page, 
       pageSize: _pageSize, 
-      keyword, 
+      keyword: kwOverride !== undefined ? kwOverride : keyword, 
       startAt, 
       endAt,
       sortField,
@@ -72,11 +74,18 @@ export default function Message() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sorting]);
 
-  // 初次加载
+  // 初次加载 + 侦听 URL 查询参数 company
   useEffect(() => {
-    runSearch(1, pageSize);
+    const params = new URLSearchParams(location.search);
+    const company = params.get('company');
+    if (company) {
+      if (company !== keyword) setKeyword(company);
+      runSearch(1, pageSize, '', '', company);
+    } else {
+      runSearch(1, pageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [location.search])
 
   const onReset = () => {
     setKeyword('')
