@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import Dashboard from '../pages/Dashboard'
 import Message from '../pages/Message'
+import Profile from '../pages/Profile'
 import Login from '../pages/Login'
 import { useAuthStore } from '../stores/auth'
 
@@ -27,6 +28,7 @@ export default function AppRoutes() {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="message" element={<Message />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

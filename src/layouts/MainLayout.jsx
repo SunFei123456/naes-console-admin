@@ -141,6 +141,15 @@ export default function MainLayout() {
                 {!collapsed && <span>{t('menu.message')}</span>}
               </span>
             </NavLink>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => `px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-zinc-800 ${isActive ? 'bg-gray-200 dark:bg-zinc-800' : ''}`}
+            >
+              <span className="inline-flex items-center gap-2">
+                <Icon name="user" className="w-4 h-4" />
+                {!collapsed && <span>{t('menu.profile')}</span>}
+              </span>
+            </NavLink>
           </nav>
 
           {/* 侧边栏底部：收缩/展开开关 */}
@@ -169,7 +178,7 @@ export default function MainLayout() {
                 crumbs.map((c, i) => (
                   <span key={i} className="inline-flex items-center gap-2">
                     <Icon name="angleRight" className="w-3 h-3 opacity-60" />
-                    <span>{c === 'dashboard' ? t('menu.dashboard') : c === 'message' ? t('menu.message') : c}</span>
+                    <span>{c === 'dashboard' ? t('menu.dashboard') : c === 'message' ? t('menu.message') : c === 'profile' ? t('menu.profile') : c}</span>
                   </span>
                 ))
               )}
